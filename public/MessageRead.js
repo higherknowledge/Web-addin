@@ -1,4 +1,4 @@
-﻿/// <reference path="/Scripts/FabricUI/MessageBanner.js" />
+/// <reference path="/Scripts/FabricUI/MessageBanner.js" />
 
 (function () {
   "use strict";
@@ -57,18 +57,26 @@
   }
 
   function fetchTemp(flag) {
-      function reqListener() {
-          if (flag == 1)
-              localStorage["intern"] = this.responseText;
-          else
-              localStorage["recruit"] = this.responseText;
-          send(this.responseText);
+      var oReq = new XMLHttpRequest();
+      
+      function reqListener() 
+      {
+          showNotification("response", oReq.status);
+          if(oReq.readyState == oReq.DONE && oReq.status == 200)
+          {
+            if (flag == 1)
+                localStorage["intern"] = this.responseText;
+            else
+                localStorage["recruit"] = this.responseText;
+            showNotification("Loading", "fetched");
+            send(this.responseText);
+          }
       }
 
-      var oReq = new XMLHttpRequest();
-      oReq.addEventListener("load", reqListener);
+      oReq.onreadystatechange = reqListener;
       oReq.open("GET", "https://raw.githubusercontent.com/higherknowledge/outlook-integration/master/templates/" + Office.context.mailbox.userProfile.emailAddress + (flag == 1 ? "" : "R"));
       oReq.send();
+      showNotification("Loading", "fetching template...");
   }
 
   function send(template) {
