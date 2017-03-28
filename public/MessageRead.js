@@ -36,7 +36,7 @@
         {
             send(localStorage["intern"]);
         }
-        
+        showNotification("Fetching...", "Template");
     }
 
     
@@ -51,7 +51,7 @@
         {
             send(localStorage["recruit"]);
         }
-        
+        showNotification("Fetching...", "Template");
     }
 
   }
@@ -68,7 +68,7 @@
                 localStorage["intern"] = this.responseText;
             else
                 localStorage["recruit"] = this.responseText;
-            showNotification("Loading", "fetched");
+            
             send(this.responseText);
           }
       }
